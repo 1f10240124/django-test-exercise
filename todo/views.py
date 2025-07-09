@@ -19,13 +19,9 @@ def index(request):
     }
     return render(request, 'todo/index.html', context)
 
-    def detail(request, task_id):
-        try:
-            task = Task.objects.get(id=task_id)
-        except Task.DoesNotExist:
-            raise Http404("Task does not exist")
-        
-        context = {
-            'task': task
-        }
-        return render(request, 'todo/detail.html', context)
+from django.shortcuts import render, get_object_or_404
+from .models import Task  # Task モデルを使っている前提です
+
+def detail(request, task_id):
+    task = get_object_or_404(Task, pk=task_id)
+    return render(request, 'todo/detail.html', {'task': task})
